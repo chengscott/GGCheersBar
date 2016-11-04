@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>AI_Project</title>
+<style type="text/css">
+
+body{
+	-moz-user-select:none;
+	-webkit-user-select:none;
+}
+
+//use CSS to draw the checkboard.
+
+
+#checkboard{
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+}
+
+#checkboard td {
+    border-right: 1px solid #000000;
+    border-top: 1px solid #000000;
+	height:44px;
+	width:48px;
+	text-align: center;
+    vertical-align: middle;
+	color:#fff;
+	font-family:"微軟雅黑";
+	font-size:12px;
+
+}
+#checkboard .star{
+	background:url(img/star.png) no-repeat scroll center center;
+}
+</style>
+</head>
+
+<body>
+	<table id="checkboard" cellpadding="0" cellspacing="0"></table>
+</body>
+
+<script type="text/javascript">
+/*
+
+		//Basic step
+		//1：控制棋子在棋盤内活動
+		//2：棋子落在方格中
+		//3：每個棋子在棋盤内的位置
+		//4：統計總棋子數
+		//5:確定棋子位子
+		//6：下子順序
+		//7：横向、縱向、斜向五子（五子以上）相連則WIN. //partner-side Need to edit oppoent!
+*/
+
+
+var Gobang = {}
+	Gobang.num = 0;   		//棋子 total #
+
+	Gobang.black = 0;		//黑子
+	Gobang.white = 1;		//白子
+	Gobang.type  = 0;
+
+	Gobang.current  = null;		// current 棋子
+
+	Gobang.calculate = {
+		type 	  : null ,  //棋子 kind
+		FIR	  : null,   //Five-In-a-Row 
+		state : 0,   //Checkboard_Condition 0:ing ; 1:end ; 2:tie
+		msg		  : null,   //messeage
+	},
+
+	Gobang.rule = function(){
+		function getElement(){
+			//getting the x,y coordinate
+			var x =	parseInt( Gobang.current.coordinate[0] );   //x-coordinate
+			var y =	parseInt( Gobang.current.coordinate[1] );	  //y-coordinate
+			//Setting interval, scope
+			var scope = {
+				'h' : new Array( [ x - 4 , y ] , [ x + 4 , y ]),  //slope 0
+				's' : new Array( [ x , y - 4 ] , [ x , y + 4 ]),  //slope DNE
+				'z' : new Array( [ x - 4  , y + 4] , [ x + 4 , y - 4 ] ), //slope -1
+				'y' : new Array( [ x - 4  , y - 4] , [ x + 4 , y + 4 ] )  //slope +1
+			};
+
+			//getting element
+			var element = new Array([],[],[],[]);
+			//slope 0 element
+			for(var h = scope['h'][0][0]; h <= scope['h'][1][0] && h < 15; h++){
+				if( h >= 0 ){
+					element[0].push( new Array( h,scope['h'][1][1] ) );
+				}
+			}
+			//slope DNE element
+			for(var s = scope['s'][0][1]; s <= scope['s'][1][1] && s < 15; s++){
+				if( s >= 0 ){
+					element[1].push( new Array( scope['s'][0][0] , s) );
+				}
+			}
+			//slope -1 element
+			for( var z = scope['z'][0]; z[0] <= scope['z'][1][0] && z[1] >= scope['z'][1][1]; z[0]++,z[1]--){
+				if( z[0] >=0 && z[0] < 15 && z[1] < 15 && z[1] >= 0 ){
+					element[2].push( new Array( z[0] , z[1]) );
+				}
+			}
+			//slope 1 element
+			for( var y = scope['y'][0]; y[0] <= scope['y'][1][0] && y[1] <= scope['y'][1][1]; y[0]++,y[1]++){
+				if( y[0] >=0 && y[0] < 15 && y[1] < 15 && y[1] >= 0 ){
+					element[3].push( new Array( y[0] , y[1]) );
+				}
+			}
+			//return the element for next-use
+			return element;
+		}
+		return {
+			control : '',
+			putting   : function(){
+				//control 棋子
+				Gobang.checkboard.obj.addEventListener('click',this.control=function(e){
+					//stop from auto act
+					e.target.addEventListener('click',function(e){
+						e.stopPropagation();
+					},false);
+					//create 棋子
+					var self = new Gobang.chessman( Gobang.type , e.target.id);
+					//store 棋子
+					Gobang.current	= self;
+					Gobang.checkboard.table[ self.coordinate[0] ][ self.coordinate[1] ] = self;
+					//Determine whether FIR
+					if( !Gobang.calculate.state){
+						//determination
+						Gobang.rule.determination();
+						//whose turn
+						Gobang.type = Gobang.type ? Gobang.black : Gobang.white;
+					}
+					//ScoreBoard
+					Gobang.rule.ScoreBoard();
+				},false)
+			},
+			//Create the function to Determine whether FIR
+			determination : function(){
+				var element = getElement();
+				var line   = new Array();
+				for(var i = 0 ; i < element.length; i++){
+					for(var h = 0 ; h < 5; h++){
+						line = new Array();
+						for(var z = 0 ; z < 5 && z + h < element[i].length; z++){
+							var x = element[i][z+h][0];
+							var y = element[i][z+h][1];
+							if( typeof Gobang.checkboard.table[x][y] !== 'undefined'){
+								if( Gobang.checkboard.table[x][y].type == Gobang.current.type ){
+									 line.push( Gobang.checkboard.table[x][y] );
+									 if( line.length == 5){
+									 	Gobang.calculate.FIR = [].concat(line);
+										Gobang.calculate.state = 1;
+										Gobang.calculate.type = Gobang.current.type;
+									 }
+								}
+							}
+						}
+					}
+				}
+			},
+			//FINAL score msg
+			ScoreBoard : function( ){
+				if( Gobang.calculate.state ){
+					Gobang.checkboard.obj.removeEventListener('click',this.control,false);
+					Gobang.calculate.msg = Gobang.calculate.type ? '白 WIN' : '黑 WIN';
+					alert(Gobang.calculate.msg);
+				}
+			}
+		}
+	}()
+	//checkboard setting
+	Gobang.checkboard = {
+		obj     : document.getElementById('checkboard'),
+		Form   : new Array(15,15),  //checkboard:15x15
+		table  	: new Array(15),	   // table
+		star : ['7,7','3,11','11,11','3,3','11,3'],	//the specific position : star
+
+		create  : function(){
+			var tr = '' ;
+			//Drawing checkboard
+			for(var y = 0 ;  y < this.Form[0] ; y++){
+				tr += '<tr>';
+				this.table[y] = new Array(15);        //initialize checkboard
+				for(var x = 0; x < this.Form[1]; x++){ //generate coordinate
+					var xy = new Array(x,y) , tdStyle = ''
+					for(var i = 0 ; i < this.star.length; i++){//Drawing Star
+						if( this.star[i].toString() == xy.toString() ){
+							tdStyle = 'star';
+						}
+					}
+					tr += '<td id=' + xy
+						  +  ' class=' + tdStyle
+						  +	 '></td>';
+				}
+				tr += '</tr>';
+			}
+			this.obj.innerHTML =  tr;
+		}
+	}
+
+	//棋子setting
+	Gobang.chessman = function( type , coordinate ){
+		this.id		 =	Gobang.num++;
+		this.type 	 =  type;
+		this.coordinate = 	coordinate.split(',');
+
+		var img = new Array(
+			'url("img/black.png") no-repeat scroll center center',
+			'url("img/white.png") no-repeat scroll center center'
+		);
+
+		var target = document.getElementById( coordinate );
+			target.style.background = img[type];
+			target.textContent = this.id;
+
+	}
+
+Gobang.checkboard.create();
+Gobang.rule.putting();
+</script>
+
+
+</html>
