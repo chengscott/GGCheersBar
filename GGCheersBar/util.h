@@ -1,3 +1,5 @@
+#ifndef util
+#define util
 #include <random>
 
 namespace GGCheersBar {
@@ -20,3 +22,4 @@ namespace GGCheersBar {
 	enum State { Win, Lose, Draw, On };
 	int random(int a, int b);
 }
+#endif
