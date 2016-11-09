@@ -15,7 +15,6 @@ namespace GGCheersBar {
 		chess_ = c;
 		curpos_ = p;
 	}
-	Go::~Go() { }
 	State Go::Judge() const {
 		// has five
 		int currow = curpos_.getX(), curcol = curpos_.getY();
@@ -71,4 +70,5 @@ namespace GGCheersBar {
 	Chess Go::get(const Position& p) const {
 		return board_[p.getX()][p.getY()];
 	}
+	Chess Go::getChess() const { return chess_; }
 }

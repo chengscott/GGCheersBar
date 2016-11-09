@@ -1,19 +1,19 @@
-#ifndef util
-#define util
+#ifndef UTIL_Def
+#define UTIL_Def
 #include <random>
 
 namespace GGCheersBar {
 	class Position {
 	public:
 		Position() {}
-		Position(const Position& rhs);
-		Position(const int& x, const int& y);
+		Position(const Position&);
+		Position(const int&, const int&);
 		~Position() {}
 		int getX() const;
 		int getY() const;
-		Position& operator=(const Position& rhs);
-		bool operator==(const Position& rhs) const;
-		bool operator!=(const Position& rhs) const;
+		Position& operator=(const Position&);
+		bool operator==(const Position&) const;
+		bool operator!=(const Position&) const;
 	private:
 		int x_, y_;
 	};
