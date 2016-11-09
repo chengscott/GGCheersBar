@@ -1,7 +1,7 @@
 #ifndef MCTS_Def
 #define MCTS_Def
-#include "util.h"
 #include "go.h"
+#include "util.h"
 #include <vector>
 #include <algorithm>
 
@@ -14,7 +14,7 @@ namespace MCTS {
 	public:
 		Node() { }
 		Node(const Node&);
-		Node(const Go&, const Position&, Node*);
+		Node(const Go&, const Position& = GGCheersBar::NotFound, Node* = nullptr);
 		~Node();
 		Node& operator=(const Node&);
 		Node* AddChild(const Position&, const Go&);
@@ -34,5 +34,7 @@ namespace MCTS {
 		Node* parent_;
 		Chess chess_;
 	};
+
+	Position ComputeMove(const Go);
 }
 #endif

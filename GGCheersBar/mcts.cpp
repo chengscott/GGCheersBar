@@ -12,8 +12,8 @@ namespace MCTS {
 		chess_ = rhs.chess_;
 	}
 
-	Node::Node(const Go& go, const Position& pos = GGCheersBar::NotFound,
-		Node* parent = nullptr) {
+	Node::Node(const Go& go, const Position& pos, Node* parent) {
+		move_ = pos;
 		moves_ = go.GetMoves();
 		chess_ = go.getChess();
 		parent_ = parent;
@@ -32,6 +32,7 @@ namespace MCTS {
 		move_ = rhs.move_;
 		parent_ = rhs.parent_;
 		chess_ = rhs.chess_;
+		return *this;
 	}
 
 	Node* Node::AddChild(const Position& move, const Go& go) {;
@@ -54,8 +55,8 @@ namespace MCTS {
 			child->UCT_score_ = double(child->visits_) / double(child->visits_) +
 			std::sqrt(2.0 + std::log(double(visits_)) / child->visits_);
 		return *std::max_element(children_.begin(), children_.end(),
-			[](const Node& lhs, const Node& rhs) {
-			return lhs.getUCTscore() < rhs.getUCTscore();
+			[](const Node* lhs, const Node* rhs) {
+			return lhs->getUCTscore() < rhs->getUCTscore();
 		});
 	}
 

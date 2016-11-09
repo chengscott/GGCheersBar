@@ -1,18 +1,17 @@
-#include "util.h"
 #ifndef GO_Def
 #define GO_Def
+#include "util.h"
 #include <vector>
 
 namespace GGCheersBar {
 	class Go {
 	public:
 		Go();
-		Go(const Chess, const Position);
+		Go(const Chess, const Position = NotFound);
 		State Judge() const;
-		void set(const Position&);
-		void set(const Position&, const Chess);
 		Chess get(const Position&) const;
 		Chess getChess() const;
+		void Move(const Position&);
 		std::vector<Position> GetMoves() const;
 	private:
 		int* GetLine(const Position&, const Chess&) const;

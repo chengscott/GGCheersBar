@@ -8,7 +8,7 @@ namespace GGCheersBar {
 		chess_ = Null;
 		curpos_ = NotFound;
 	}
-	Go::Go(const Chess c, const Position p = NotFound) {
+	Go::Go(const Chess c, const Position p) {
 		for (int i = 0; i < 15; ++i)
 			for (int j = 0; j < 15; ++j)
 				board_[i][j] = Null;
@@ -61,14 +61,13 @@ namespace GGCheersBar {
 	State Go::isWin(const Chess& c) const {
 		return c == chess_ ? Win : Lose;
 	}
-	void Go::set(const Position& p) {
-		set(p, chess_);
-	}
-	void Go::set(const Position& p, const Chess c) {
-		board_[p.getX()][p.getY()] = c;
-	}
 	Chess Go::get(const Position& p) const {
 		return board_[p.getX()][p.getY()];
 	}
 	Chess Go::getChess() const { return chess_; }
+	void Go::Move(const Position& move) {
+		board_[move.getX()][move.getY()] = chess_;
+		chess_ = chess_ == Black ? White : Black;
+		curpos_ = move;
+	}
 }
