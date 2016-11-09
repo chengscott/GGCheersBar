@@ -4,15 +4,15 @@ namespace GGCheersBar {
 	class Go {
 	public:
 		Go();
-		Go(const Chess c);
+		Go(const Chess, const Position);
 		~Go();
 		State Judge() const;
-		Position Play();
 		void set(const Position&);
-		void set(const Position&, const Chess c);
+		void set(const Position&, const Chess);
 		Chess get(const Position&) const;
 	private:
+		State isWin(const Chess&) const;
 		Chess board_[15][15], chess_;
-		Position threat();
+		Position curpos_;
 	};
 }

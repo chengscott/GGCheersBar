@@ -1,4 +1,4 @@
-#include "util.h"
+﻿#include "util.h"
 
 namespace GGCheersBar {
 	Position::Position(const Position & rhs) {
@@ -19,12 +19,10 @@ namespace GGCheersBar {
 	bool Position::operator!=(const Position & rhs) const {
 		return (x_ != rhs.getX() || y_ != rhs.getY());
 	}
-	int random_int() {
-		int seed = 20161029;
-		return seed += (seed << 16) + 0x1db3d743;
-	}
-	long long random_long_long() {
-		long long seed = 20161029;
-		return seed += (seed << 32) + 0xdb3d742c265539d;
+	int random(int a, int b) {
+		std::random_device rnd;
+		std::mt19937 twist(rnd());
+		std::uniform_int_distribution<> distr(a, b);
+		return distr(twist);
 	}
 }

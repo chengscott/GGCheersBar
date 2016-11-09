@@ -1,3 +1,5 @@
+#include <random>
+
 namespace GGCheersBar {
 	class Position {
 	public:
@@ -16,6 +18,5 @@ namespace GGCheersBar {
 	Position const NotFound(-1, -1);
 	enum Chess { Black, White, Null };
 	enum State { Win, Lose, Draw, On };
-	int random_int();
-	long long random_long_long();
+	int random(int a, int b);
 }
