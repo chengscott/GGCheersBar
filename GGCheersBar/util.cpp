@@ -8,6 +8,9 @@ namespace GGCheersBar {
 	Position::Position(const int& x, const int& y) { x_ = x, y_ = y; }
 	int Position::getX() const { return x_; }
 	int Position::getY() const { return y_; }
+	bool Position::operator<(const Position& rhs) const {
+		return x_ < rhs.getX() || (x_ == rhs.getX() && y_ < rhs.getY());
+	}
 	Position& Position::operator=(const Position & rhs) {
 		x_ = rhs.getX();
 		y_ = rhs.getY();

@@ -52,6 +52,8 @@ namespace MCTS {
 
 	double Node::getUCTscore() const { return UCT_score_; }
 
+	double Node::getWins() const { return wins_; }
+
 	int Node::getVisits() const { return visits_; }
 
 	Position Node::getMove() const { return move_; }
@@ -72,18 +74,17 @@ namespace MCTS {
 	}
 
 	Position ComputeMove(const Go& go) {
-		auto moves = go.GetMoves();
+		std::vector<Position> moves = go.GetMoves();
 		if (moves.size() == 1) return moves[0];
 		Node root = ComputeTree(go);
+		long long games_played = root.getVisits();
 		std::map<Position, int> visits;
 		std::map<Position, double> wins;
-		long long games_played = root.getVisits();
-		auto children = root.getChildren;
+		std::vector<Node*> children = root.getChildren();
 		for (auto child = children.cbegin(); child != children.cend(); ++child) {
-			visits[(*child)->move] += (*child)->visits;
-			wins[(*child)->move] += (*child)->wins;
+			visits[(*child)->getMove()] += (*child)->getVisits();
+			wins[(*child)->getMove()] += (*child)->getWins();
 		}
-
 		double best_score = -1;
 		Position best_move = Position();
 		for (auto itr : visits) {
@@ -108,7 +109,7 @@ namespace MCTS {
 		auto start_time = std::chrono::high_resolution_clock::now();
 		Node node = Node(go);
 		while (true) {
-			while (!node.hasMoves() && node.hasChildren) {
+			while (!node.hasMoves() && node.hasChildren()) {
 				node = *node.GetUCTChild();
 				go.Move(node.getMove());
 			}

@@ -9,7 +9,6 @@ namespace GGCheersBar {
 		Go();
 		Go(const Chess, const Position = NotFound);
 		State Judge() const;
-		Chess get(const Position&) const;
 		Chess getChess() const;
 		void Move(const Position&);
 		std::vector<Position> GetMoves() const;

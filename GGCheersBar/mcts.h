@@ -26,6 +26,7 @@ namespace MCTS {
 		Position getNotMove() const;
 		std::vector<Node*> getChildren() const;
 		double getUCTscore() const;
+		double getWins() const;
 		int getVisits() const;
 		Position getMove() const;
 		void Update(const double);

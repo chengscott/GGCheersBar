@@ -4,13 +4,12 @@
 #include "mcts.h"
 using namespace GGCheersBar;
 
-
 int main() {
 	Chess AI;
 	int chess;
 	scanf("%d", &chess);
 	AI = chess == 0 ? Black : White;
-	Go go(AI);
+	Go go(Black);
 	Position move;
 	while (go.Judge() == On) {
 		if (go.getChess() == AI) {

@@ -11,6 +11,7 @@ namespace GGCheersBar {
 		~Position() {}
 		int getX() const;
 		int getY() const;
+		bool operator<(const Position&) const;
 		Position& operator=(const Position&);
 		bool operator==(const Position&) const;
 		bool operator!=(const Position&) const;

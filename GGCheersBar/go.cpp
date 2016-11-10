@@ -61,13 +61,15 @@ namespace GGCheersBar {
 	State Go::isWin(const Chess& c) const {
 		return c == chess_ ? Win : Lose;
 	}
-	Chess Go::get(const Position& p) const {
-		return board_[p.getX()][p.getY()];
-	}
 	Chess Go::getChess() const { return chess_; }
 	void Go::Move(const Position& move) {
 		board_[move.getX()][move.getY()] = chess_;
 		chess_ = chess_ == Black ? White : Black;
 		curpos_ = move;
+	}
+	std::vector<Position> Go::GetMoves() const {
+		std::vector<Position> moves;
+		// TODO
+		return moves;
 	}
 }
