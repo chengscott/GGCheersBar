@@ -11,18 +11,12 @@ namespace MCTS {
 		parent_ = rhs.parent_;
 		chess_ = rhs.chess_;
 	}
-
 	Node::Node(const Go& go, const Position& pos, Node* parent) {
 		move_ = pos;
 		moves_ = go.GetMoves();
 		chess_ = go.getChess();
 		parent_ = parent;
 	}
-
-	Node::~Node() {
-		for (Node* child : children_) delete child;
-	}
-
 	Node& Node::operator=(const Node& rhs) {
 		children_ = rhs.children_;
 		moves_ = rhs.moves_;
@@ -34,7 +28,14 @@ namespace MCTS {
 		chess_ = rhs.chess_;
 		return *this;
 	}
-
+	Node::~Node() {
+		for (Node* child : children_) delete child;
+	}
+	std::vector<Node*> Node::getChildren() const { return children_; }
+	double Node::getUCTscore() const { return UCT_score_; }
+	double Node::getWins() const { return wins_; }
+	int Node::getVisits() const { return visits_; }
+	Position Node::getMove() const { return move_; }
 	Node* Node::AddChild(const Position& move, const Go& go) {;
 		Node* child = new Node(go, move, this);
 		children_.push_back(child);
@@ -43,21 +44,7 @@ namespace MCTS {
 		moves_.erase(it);
 		return child;
 	}
-
 	bool Node::hasChildren() const { return !children_.empty(); }
-
-	bool Node::hasMoves() const { return !moves_.empty();  }
-
-	std::vector<Node*> Node::getChildren() const { return children_; }
-
-	double Node::getUCTscore() const { return UCT_score_; }
-
-	double Node::getWins() const { return wins_; }
-
-	int Node::getVisits() const { return visits_; }
-
-	Position Node::getMove() const { return move_; }
-
 	Node* Node::GetUCTChild() const {
 		for (Node* child : children_)
 			child->UCT_score_ = double(child->visits_) / double(child->visits_) +
@@ -67,7 +54,11 @@ namespace MCTS {
 			return lhs->getUCTscore() < rhs->getUCTscore();
 		});
 	}
-
+	bool Node::hasMoves() const { return !moves_.empty(); }
+	Position Node::getNotMove() const {
+		// TODO
+		return Position(-1, -1);
+	}
 	void Node::Update(const double rhs) {
 		++visits_;
 		wins_ += rhs;

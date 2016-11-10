@@ -8,8 +8,8 @@ namespace GGCheersBar {
 	public:
 		Go();
 		Go(const Chess, const Position = NotFound);
-		State Judge() const;
 		Chess getChess() const;
+		State Judge() const;
 		void Move(const Position&);
 		std::vector<Position> GetMoves() const;
 	private:

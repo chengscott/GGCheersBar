@@ -15,6 +15,7 @@ namespace GGCheersBar {
 		chess_ = c;
 		curpos_ = p;
 	}
+	Chess Go::getChess() const { return chess_; }
 	State Go::Judge() const {
 		// has five
 		int currow = curpos_.getX(), curcol = curpos_.getY();
@@ -27,6 +28,16 @@ namespace GGCheersBar {
 				if (board_[i][j] == Null)
 					return On;
 		return Draw;
+	}
+	void Go::Move(const Position& move) {
+		board_[move.getX()][move.getY()] = chess_;
+		chess_ = chess_ == Black ? White : Black;
+		curpos_ = move;
+	}
+	std::vector<Position> Go::GetMoves() const {
+		std::vector<Position> moves;
+		// TODO
+		return moves;
 	}
 	// @return {-1, -1, 2, 3, 4, >=5}
 	int* Go::GetLine(const Position& pos, const Chess& curchess) const {
@@ -58,18 +69,5 @@ namespace GGCheersBar {
 		for (int i = 5; i >= 2; --i) count[i] -= count[i - 1];
 		return count;
 	}
-	State Go::isWin(const Chess& c) const {
-		return c == chess_ ? Win : Lose;
-	}
-	Chess Go::getChess() const { return chess_; }
-	void Go::Move(const Position& move) {
-		board_[move.getX()][move.getY()] = chess_;
-		chess_ = chess_ == Black ? White : Black;
-		curpos_ = move;
-	}
-	std::vector<Position> Go::GetMoves() const {
-		std::vector<Position> moves;
-		// TODO
-		return moves;
-	}
+	State Go::isWin(const Chess& c) const { return c == chess_ ? Win : Lose; }
 }

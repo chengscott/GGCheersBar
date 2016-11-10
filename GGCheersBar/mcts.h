@@ -11,24 +11,25 @@ namespace MCTS {
 	typedef typename GGCheersBar::Go Go;
 	typedef typename GGCheersBar::Position Position;
 	typedef typename GGCheersBar::Chess Chess;
+	const double THRESHOLD_TIME = 9.2;
 
 	class Node {
 	public:
 		Node() { }
 		Node(const Node&);
 		Node(const Go&, const Position& = GGCheersBar::NotFound, Node* = nullptr);
-		~Node();
 		Node& operator=(const Node&);
-		Node* AddChild(const Position&, const Go&);
-		bool hasChildren() const;
-		Node* GetUCTChild() const;
-		bool hasMoves() const;
-		Position getNotMove() const;
+		~Node();
 		std::vector<Node*> getChildren() const;
 		double getUCTscore() const;
 		double getWins() const;
 		int getVisits() const;
 		Position getMove() const;
+		Node* AddChild(const Position&, const Go&);
+		bool hasChildren() const;
+		Node* GetUCTChild() const;
+		bool hasMoves() const;
+		Position getNotMove() const;
 		void Update(const double);
 	private:
 		std::vector<Node*> children_;
@@ -43,6 +44,5 @@ namespace MCTS {
 
 	Position ComputeMove(const Go&);
 	Node ComputeTree(Go);
-	const double THRESHOLD_TIME = 9.2;
 }
 #endif
