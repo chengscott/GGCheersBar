@@ -56,8 +56,8 @@ namespace MCTS {
 	}
 	bool Node::hasMoves() const { return !moves_.empty(); }
 	Position Node::getNotMove() const {
-		// TODO
-		return Position(-1, -1);
+		// TODO: heuristics
+		return moves_[GGCheersBar::random(0, moves_.size() - 1)];
 	}
 	void Node::Update(const double rhs) {
 		++visits_;
@@ -109,7 +109,7 @@ namespace MCTS {
 				go.Move(move);
 				node = *node.AddChild(move, go);
 			}
-			// while (go.has_moves) go.random_move
+			while (go.Judge() == GGCheersBar::On) go.heuristicPlay();
 			auto end_time = std::chrono::high_resolution_clock::now();
 			double dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
 			if (dt > THRESHOLD_TIME) break;

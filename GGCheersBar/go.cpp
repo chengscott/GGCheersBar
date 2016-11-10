@@ -29,6 +29,7 @@ namespace GGCheersBar {
 					return On;
 		return Draw;
 	}
+	State Go::isWin(const Chess& c) const { return c == chess_ ? Win : Lose; }
 	void Go::Move(const Position& move) {
 		board_[move.getX()][move.getY()] = chess_;
 		chess_ = chess_ == Black ? White : Black;
@@ -36,8 +37,28 @@ namespace GGCheersBar {
 	}
 	std::vector<Position> Go::GetMoves() const {
 		std::vector<Position> moves;
-		// TODO
+		// TODO: heuritics
+		for (int i = 0; i < 15; ++i)
+			for (int j = 0; j < 15; ++j) {
+				if (board_[i][j] == Null && (
+						(i > 0 && board_[i - 1][j] != Null) ||
+						(i > 1 && board_[i - 2][j] != Null) ||
+						(i < 14 && board_[i + 1][j] != Null) ||
+						(i < 13 && board_[i + 2][j] != Null) ||
+						(j > 0 && board_[i][j - 1] != Null) ||
+						(j > 1 && board_[i][j - 2] != Null) ||
+						(j < 14 && board_[i][j + 1] != Null) ||
+						(j < 13 && board_[i][j + 2] != Null)
+					)
+				   )
+					moves.push_back(Position(i, j));
+			}
 		return moves;
+	}
+	void Go::heuristicPlay() {
+		// TODO: heuristics
+		std::vector<Position> moves = GetMoves();
+		Move(moves[GGCheersBar::random(0, moves.size() - 1)]);
 	}
 	// @return {-1, -1, 2, 3, 4, >=5}
 	int* Go::GetLine(const Position& pos, const Chess& curchess) const {
@@ -69,5 +90,4 @@ namespace GGCheersBar {
 		for (int i = 5; i >= 2; --i) count[i] -= count[i - 1];
 		return count;
 	}
-	State Go::isWin(const Chess& c) const { return c == chess_ ? Win : Lose; }
 }
