@@ -1,9 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>AI_Project</title>
-<style type="text/css">
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GGCheersBar</title>
+<style>
 
 body{
 	-moz-user-select:none;
@@ -12,23 +14,22 @@ body{
 
 //use CSS to draw the checkboard.
 
-
-#checkboard{
-    border: none;
+#checkboard tbody {
+    border: 3px solid #000;
 }
 
 #checkboard td {
-	background:url(img/grid.png) no-repeat scroll center center;
-	height:44px;
-	width:48px;
+	background: url(img/grid.png) no-repeat scroll center center;
+	height: 44px;
+	width: 48px;
 	text-align: center;
-    vertical-align: middle;
-	color:#f00;
-	font-family:"微軟雅黑";
-	font-size:12px;
+	vertical-align: middle;
+	color: #f00;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 16px;
 }
 #checkboard .star{
-	background:url(img/star.png) no-repeat scroll center center;
+	background: url(img/star.png) no-repeat scroll center center;
 }
 </style>
 </head>
@@ -37,7 +38,7 @@ body{
 	<table id="checkboard" cellpadding="0" cellspacing="0"></table>
 </body>
 
-<script type="text/javascript">
+<script>
 /*
 
 		//Basic step
@@ -176,10 +177,14 @@ var Gobang = {}
 		star : ['7,7','3,11','11,11','3,3','11,3'],	//the specific position : star
 
 		create  : function(){
-			var tr = '' ;
+			var td = '<thead><th></th>';
+			for (var k = 0; k < 15; ++k)
+				td += '<th>' + k + '</th>';
+			td += '</thead>';
 			//Drawing checkboard
+			var tr = '<tbody style="border: 3px solid #000;">';
 			for(var y = 0 ;  y < this.Form[0] ; y++){
-				tr += '<tr>';
+				tr += '<tr>' + '<th>' + String.fromCharCode(65 + y) + '</th>';
 				this.table[y] = new Array(15);        //initialize checkboard
 				for(var x = 0; x < this.Form[1]; x++){ //generate coordinate
 					var xy = new Array(x,y) , tdStyle = ''
@@ -194,7 +199,8 @@ var Gobang = {}
 				}
 				tr += '</tr>';
 			}
-			this.obj.innerHTML =  tr;
+			tr += '</tbody>';
+			this.obj.innerHTML = td + tr;
 		}
 	}
 
