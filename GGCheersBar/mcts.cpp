@@ -124,7 +124,7 @@ namespace MCTS {
 			// time threshold
 			auto end_time = std::chrono::high_resolution_clock::now();
 			double dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-			//if (dt > THRESHOLD_TIME) break;
+			if (dt > THRESHOLD_TIME) break;
 		}
 		return *node;
 	}

@@ -15,8 +15,10 @@ int main() {
 		if (go.getChess() == AI) {
 			move = MCTS::ComputeMove(go);
 		} else {
-			char row; int col;
-			scanf("%c%d", &row, &col);
+			char row_ch;
+			int row, col;
+			scanf(" %c %d", &row_ch, &col);
+			row = row_ch - 'A';
 			move = Position(row, col);
 		}
 		go.Move(move);
