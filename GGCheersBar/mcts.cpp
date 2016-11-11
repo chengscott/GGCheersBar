@@ -58,7 +58,8 @@ namespace MCTS {
 	bool Node::hasMoves() const { return !moves_.empty(); }
 	Position Node::getNotMove() const {
 		// TODO: heuristics
-		return moves_[GGCheersBar::random(0, moves_.size() - 1)];
+		size_t idx = GGCheersBar::random(0, moves_.size() - 1);
+		return moves_[idx];
 	}
 	void Node::Update(const double rhs) {
 		++visits_;
@@ -90,15 +91,13 @@ namespace MCTS {
 				best_move = move;
 				best_score = expected_success_rate;
 			}
-			// Move: itr.first
-			// visits (%): int(100.0 * v / double(games_played) + 0.5)
-			// wins (%): int(100.0 * w / v + 0.5)
 		}
+		printf("Expected success rate: %.3llf%%", best_score);
 		return best_move;
 	}
 
 	Node ComputeTree(Go go) {
-		auto start_time = std::chrono::high_resolution_clock::now();
+		auto start_time = high_resolution_clock::now();
 		Node* node = new Node(go);
 		while (true) {
 			// Selection
@@ -122,8 +121,8 @@ namespace MCTS {
 				node_parent = node->getParent();
 			}
 			// time threshold
-			auto end_time = std::chrono::high_resolution_clock::now();
-			double dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+			auto end_time = high_resolution_clock::now();
+			double dt = 1.e-9*duration_cast<nanoseconds>(end_time - start_time).count();
 			if (dt > THRESHOLD_TIME) break;
 		}
 		return *node;

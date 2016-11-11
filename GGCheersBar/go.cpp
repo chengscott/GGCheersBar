@@ -15,6 +15,9 @@ namespace GGCheersBar {
 		chess_ = c;
 		curpos_ = p;
 	}
+	Chess Go::getBoardChess(const Position& pos) const {
+		return board_[pos.getX()][pos.getY()];
+	}
 	Chess Go::getChess() const { return chess_; }
 	State Go::Judge() const {
 		int currow = curpos_.getX(), curcol = curpos_.getY();
@@ -38,7 +41,7 @@ namespace GGCheersBar {
 	}
 	std::vector<Position> Go::GetMoves() const {
 		std::vector<Position> moves;
-		// TODO: heuritics
+		// TODO: heuristics
 		if (board_[curpos_.getX()][curpos_.getY()] == Null)
 			moves.push_back(curpos_);
 		// Near two
@@ -62,7 +65,8 @@ namespace GGCheersBar {
 	void Go::Simulation() {
 		// TODO: heuristics
 		std::vector<Position> moves = GetMoves();
-		Move(moves[GGCheersBar::random(0, moves.size() - 1)]);
+		size_t idx = GGCheersBar::random(0, moves.size() - 1);
+		Move(moves[idx]);
 	}
 	// @return {-1, -1, 2, 3, 4, >=5}
 	int* Go::GetLine(const Position& pos, const Chess& curchess) const {

@@ -3,6 +3,7 @@
 #include <random>
 
 namespace GGCheersBar {
+	static const char* CHESS[] = { "Black", "White", "Null" };
 	enum Chess { Black, White, Null };
 	enum State { Win, Lose, Draw, On };
 	class Position {
@@ -20,7 +21,7 @@ namespace GGCheersBar {
 	private:
 		int x_, y_;
 	};
-	const Position NotFound(-1, -1);
-	int random(int a, int b);
+	static const Position NotFound(-1, -1);
+	size_t random(int a, int b);
 }
 #endif

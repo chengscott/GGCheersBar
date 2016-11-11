@@ -6,12 +6,13 @@
 #include <map>
 #include <algorithm>
 #include <chrono>
+using namespace std::chrono;
 
 namespace MCTS {
 	typedef typename GGCheersBar::Go Go;
 	typedef typename GGCheersBar::Position Position;
 	typedef typename GGCheersBar::Chess Chess;
-	const double THRESHOLD_TIME = 9.2;
+	static const double THRESHOLD_TIME = 9.2;
 
 	class Node {
 	public:

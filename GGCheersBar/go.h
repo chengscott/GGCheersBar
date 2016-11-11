@@ -8,6 +8,7 @@ namespace GGCheersBar {
 	public:
 		Go();
 		Go(const Chess, const Position = NotFound);
+		Chess getBoardChess(const Position&) const;
 		Chess getChess() const;
 		State Judge() const;
 		void Move(const Position&);
