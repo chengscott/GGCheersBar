@@ -31,7 +31,7 @@ int main() {
 			move = MCTS::ComputeMove(go);
 			auto end_time = high_resolution_clock::now();
 			double dt = 1.e-9*duration_cast<nanoseconds>(end_time - start_time).count();
-			printf(" Spend: %.3llfs\n", dt);
+			printf(" Spend: %.3fs\n", dt);
 		} else {
 			do {
 				move = readPosition();
@@ -43,13 +43,13 @@ int main() {
 	}
 	switch (judge) {
 	case Win:
-		printf("[%s] Win", CHESS[go.getChess()]);
+		printf("\n\n[%s] Win", CHESS[go.getChess()]);
 		break;
 	case Lose:
-		printf("[%s] Lose", CHESS[go.getChess()]);
+		printf("\n\n[%s] Lose", CHESS[go.getChess()]);
 		break;
 	case Draw:
-		printf("Draw");
+		printf("\n\nDraw");
 		break;
 	}
 	scanf("%d", &option);

@@ -19,10 +19,4 @@ namespace GGCheersBar {
 	bool Position::operator==(const Position & rhs) const {
 		return (x_ == rhs.getX() && y_ == rhs.getY());
 	}
-	size_t random(int a, int b) {
-		std::random_device rnd;
-		std::mt19937 twist(rnd());
-		std::uniform_int_distribution<> distr(a, b);
-		return distr(twist);
-	}
 }

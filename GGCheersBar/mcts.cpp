@@ -56,10 +56,9 @@ namespace MCTS {
 		});
 	}
 	bool Node::hasMoves() const { return !moves_.empty(); }
-	Position Node::getNotMove() const {
-		// TODO: heuristics
-		size_t idx = GGCheersBar::random(0, moves_.size() - 1);
-		return moves_[idx];
+	Position Node::getExpandedMove() const {
+		// HACK: heuristics
+		return moves_[0];
 	}
 	void Node::Update(const double rhs) {
 		++visits_;
@@ -92,7 +91,7 @@ namespace MCTS {
 				best_score = expected_success_rate;
 			}
 		}
-		printf("Expected success rate: %.3llf%%", best_score);
+		printf("Expected success rate: %.3f%%", best_score);
 		return best_move;
 	}
 
@@ -107,7 +106,7 @@ namespace MCTS {
 			}
 			// Expansion
 			if (node->hasMoves()) {
-				Position move = node->getNotMove();
+				Position move = node->getExpandedMove();
 				go.Move(move);
 				node = node->AddChild(move, go);
 			}

@@ -31,7 +31,7 @@ namespace MCTS {
 		bool hasChildren() const;
 		Node* GetUCTChild() const;
 		bool hasMoves() const;
-		Position getNotMove() const;
+		Position getExpandedMove() const;
 		void Update(const double);
 	private:
 		std::vector<Node*> children_;

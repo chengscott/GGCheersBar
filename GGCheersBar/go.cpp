@@ -60,13 +60,14 @@ namespace GGCheersBar {
 				   )
 					moves.push_back(Position(i, j));
 			}
+		std::random_device rnd;
+		std::mt19937 twist(rnd());
+		std::shuffle(moves.begin(), moves.end(), twist);
 		return moves;
 	}
 	void Go::Simulation() {
-		// TODO: heuristics
-		std::vector<Position> moves = GetMoves();
-		size_t idx = GGCheersBar::random(0, moves.size() - 1);
-		Move(moves[idx]);
+		// HACK: heuristics
+		Move(GetMoves()[0]);
 	}
 	// @return {-1, -1, 2, 3, 4, >=5}
 	int* Go::GetLine(const Position& pos, const Chess& curchess) const {

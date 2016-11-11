@@ -1,6 +1,5 @@
 #ifndef UTIL_Def
 #define UTIL_Def
-#include <random>
 
 namespace GGCheersBar {
 	static const char* CHESS[] = { "Black", "White", "Null" };
@@ -22,6 +21,5 @@ namespace GGCheersBar {
 		int x_, y_;
 	};
 	static const Position NotFound(-1, -1);
-	size_t random(int a, int b);
 }
 #endif

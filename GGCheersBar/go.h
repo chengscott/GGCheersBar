@@ -2,6 +2,8 @@
 #define GO_Def
 #include "util.h"
 #include <vector>
+#include <algorithm>
+#include <random>
 
 namespace GGCheersBar {
 	class Go {
