@@ -9,7 +9,7 @@ int main() {
 	int chess;
 	scanf("%d", &chess);
 	AI = chess == 0 ? Black : White;
-	Go go(Black);
+	Go go(Black, Position(8, 7));
 	Position move;
 	while (go.Judge() == On) {
 		if (go.getChess() == AI) {

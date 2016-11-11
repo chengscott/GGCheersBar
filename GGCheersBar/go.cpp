@@ -17,9 +17,10 @@ namespace GGCheersBar {
 	}
 	Chess Go::getChess() const { return chess_; }
 	State Go::Judge() const {
-		// has five
 		int currow = curpos_.getX(), curcol = curpos_.getY();
 		Chess curchess = board_[currow][curcol];
+		if (curchess == Null) return On;
+		// has five
 		int* count = GetLine(curpos_, curchess);
 		if (count[5] > 0) return isWin(curchess);
 		// has Null
@@ -38,6 +39,9 @@ namespace GGCheersBar {
 	std::vector<Position> Go::GetMoves() const {
 		std::vector<Position> moves;
 		// TODO: heuritics
+		if (board_[curpos_.getX()][curpos_.getY()] == Null)
+			moves.push_back(curpos_);
+		// Near two
 		for (int i = 0; i < 15; ++i)
 			for (int j = 0; j < 15; ++j) {
 				if (board_[i][j] == Null && (
@@ -55,7 +59,7 @@ namespace GGCheersBar {
 			}
 		return moves;
 	}
-	void Go::heuristicPlay() {
+	void Go::Simulation() {
 		// TODO: heuristics
 		std::vector<Position> moves = GetMoves();
 		Move(moves[GGCheersBar::random(0, moves.size() - 1)]);

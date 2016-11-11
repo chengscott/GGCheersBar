@@ -36,6 +36,7 @@ namespace MCTS {
 	double Node::getWins() const { return wins_; }
 	int Node::getVisits() const { return visits_; }
 	Position Node::getMove() const { return move_; }
+	Node* Node::getParent() const { return parent_; }
 	Node* Node::AddChild(const Position& move, const Go& go) {;
 		Node* child = new Node(go, move, this);
 		children_.push_back(child);
@@ -98,23 +99,33 @@ namespace MCTS {
 
 	Node ComputeTree(Go go) {
 		auto start_time = std::chrono::high_resolution_clock::now();
-		Node node = Node(go);
+		Node* node = new Node(go);
 		while (true) {
-			while (!node.hasMoves() && node.hasChildren()) {
-				node = *node.GetUCTChild();
-				go.Move(node.getMove());
+			// Selection
+			while (!node->hasMoves() && node->hasChildren()) {
+				node = node->GetUCTChild();
+				go.Move(node->getMove());
 			}
-			if (node.hasMoves()) {
-				auto move = node.getNotMove();
+			// Expansion
+			if (node->hasMoves()) {
+				Position move = node->getNotMove();
 				go.Move(move);
-				node = *node.AddChild(move, go);
+				node = node->AddChild(move, go);
 			}
-			while (go.Judge() == GGCheersBar::On) go.heuristicPlay();
+			// Simulation
+			while (go.Judge() == GGCheersBar::On) go.Simulation();
+			// Backpropogation
+			Node* node_parent = node->getParent();
+			while (node_parent != nullptr) {
+				node->Update(go.Judge());
+				node = node_parent;
+				node_parent = node->getParent();
+			}
+			// time threshold
 			auto end_time = std::chrono::high_resolution_clock::now();
 			double dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-			if (dt > THRESHOLD_TIME) break;
+			//if (dt > THRESHOLD_TIME) break;
 		}
-		return node;
-
+		return *node;
 	}
 }

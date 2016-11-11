@@ -12,7 +12,7 @@ namespace GGCheersBar {
 		State Judge() const;
 		void Move(const Position&);
 		std::vector<Position> GetMoves() const;
-		void heuristicPlay();
+		void Simulation();
 	private:
 		int* GetLine(const Position&, const Chess&) const;
 		State isWin(const Chess&) const;

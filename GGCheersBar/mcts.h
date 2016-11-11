@@ -25,6 +25,7 @@ namespace MCTS {
 		double getWins() const;
 		int getVisits() const;
 		Position getMove() const;
+		Node* getParent() const;
 		Node* AddChild(const Position&, const Go&);
 		bool hasChildren() const;
 		Node* GetUCTChild() const;
