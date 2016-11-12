@@ -12,7 +12,7 @@ namespace MCTS {
 	typedef typename GGCheersBar::Go Go;
 	typedef typename GGCheersBar::Position Position;
 	typedef typename GGCheersBar::Chess Chess;
-	static const double THRESHOLD_TIME = 9.2;
+	static const double THRESHOLD_TIME = 9.5;
 
 	class Node {
 	public:

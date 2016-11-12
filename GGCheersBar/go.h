@@ -2,6 +2,7 @@
 #define GO_Def
 #include "util.h"
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <random>
 
