@@ -12,12 +12,15 @@ body{
 	-webkit-user-select:none;
 }
 
-//use CSS to draw the checkboard.
-
-#checkboard tbody {
-    border: 3px solid #000;
+#checkboard tr:first-child td {
+    border-top: 3px solid #000;
 }
-
+#checkboard tr:last-child td {
+    border-bottom: 3px solid #000;
+}
+#checkboard td:last-child {
+    border-right: 3px solid #000;
+}
 #checkboard td {
 	background: url(img/grid.png) no-repeat scroll center center;
 	height: 44px;
@@ -182,9 +185,10 @@ var Gobang = {}
 				td += '<th>' + k + '</th>';
 			td += '</thead>';
 			//Drawing checkboard
-			var tr = '<tbody style="border: 3px solid #000;">';
+			var tr = '<tbody>';
 			for(var y = 0 ;  y < this.Form[0] ; y++){
-				tr += '<tr>' + '<th>' + String.fromCharCode(65 + y) + '</th>';
+				tr += '<tr>' + '<th style="border-right: 3px solid #000">'
+					+ String.fromCharCode(65 + y) + '</th>';
 				this.table[y] = new Array(15);        //initialize checkboard
 				for(var x = 0; x < this.Form[1]; x++){ //generate coordinate
 					var xy = new Array(x,y) , tdStyle = ''
