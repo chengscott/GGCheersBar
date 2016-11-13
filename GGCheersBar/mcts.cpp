@@ -48,7 +48,7 @@ namespace MCTS {
 	bool Node::hasChildren() const { return !children_.empty(); }
 	Node* Node::GetUCTChild() const {
 		for (Node* child : children_)
-			child->UCT_score_ = double(child->visits_) / double(child->visits_) +
+			child->UCT_score_ = double(child->wins_) / double(child->visits_) +
 			std::sqrt(2.0 + std::log(double(visits_)) / child->visits_);
 		return *std::max_element(children_.begin(), children_.end(),
 			[](const Node* lhs, const Node* rhs) {
