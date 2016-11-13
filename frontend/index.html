@@ -39,6 +39,8 @@ body{
 
 <body>
 	<table id="checkboard" cellpadding="0" cellspacing="0"></table>
+	<button id="button1" type="button" value="0">先手：人</button>
+	<button id="button2" type="button" value="0">開始</button>
 </body>
 
 <script>
@@ -54,7 +56,6 @@ body{
 		//7：横向、縱向、斜向五子（五子以上）相連則WIN. //partner-side Need to edit oppoent!
 */
 
-
 var Gobang = {}
 	Gobang.num = 0;   		//棋子 total #
 
@@ -69,8 +70,28 @@ var Gobang = {}
 		FIR	  : null,   //Five-In-a-Row 
 		state : 0,   //Checkboard_Condition 0:ing ; 1:end ; 2:tie
 		msg		  : null,   //messeage
-	},
-
+	};
+	button1 = document.getElementById('button1');
+	button1.onclick=function(){
+		if(Gobang.num==0){
+			if(button1.value==0){
+				button1.textContent="先手:電腦";
+				button1.value = 1;
+			}
+			else{
+				button1.textContent="先手:人";
+				button1.value = 0;
+			}
+		}
+	}
+	button2 = document.getElementById('button2');
+	button2.onclick=function(){
+		if(button2.value==0){
+			button2.value = 1;
+			button2.disabled='true';
+			button1.disabled='true';
+		}
+	}
 	Gobang.rule = function(){
 		function getElement(){
 			//getting the x,y coordinate
@@ -116,27 +137,29 @@ var Gobang = {}
 		return {
 			control : '',
 			putting   : function(){
-				//control 棋子
+					//control 棋子
 				Gobang.checkboard.obj.addEventListener('click',this.control=function(e){
 					//stop from auto act
 					e.target.addEventListener('click',function(e){
 						e.stopPropagation();
 					},false);
 					//create 棋子
-					var self = new Gobang.chessman( Gobang.type , e.target.id);
-					//store 棋子
-					Gobang.current	= self;
-					Gobang.checkboard.table[ self.coordinate[0] ][ self.coordinate[1] ] = self;
-					//Determine whether FIR
-					if( !Gobang.calculate.state){
-						//determination
-						Gobang.rule.determination();
-						//whose turn
-						Gobang.type = Gobang.type ? Gobang.black : Gobang.white;
+					if(document.getElementById('button2').value==1){
+						var self = new Gobang.chessman( Gobang.type , e.target.id);
+						//store 棋子
+						Gobang.current	= self;
+						Gobang.checkboard.table[ self.coordinate[0] ][ self.coordinate[1] ] = self;
+						//Determine whether FIR
+						if( !Gobang.calculate.state){
+							//determination
+							Gobang.rule.determination();
+							//whose turn
+							Gobang.type = Gobang.type ? Gobang.black : Gobang.white;
+						}
+						//ScoreBoard
+						Gobang.rule.ScoreBoard();
 					}
-					//ScoreBoard
-					Gobang.rule.ScoreBoard();
-				},false)
+				},false);
 			},
 			//Create the function to Determine whether FIR
 			determination : function(){
@@ -229,6 +252,8 @@ var Gobang = {}
 
 Gobang.checkboard.create();
 Gobang.rule.putting();
+
+
 </script>
 
 
