@@ -12,6 +12,9 @@ body{
 	-webkit-user-select:none;
 }
 
+#checkboard {
+	float: left;
+}
 #checkboard tr:first-child td {
     border-top: 3px solid #000;
 }
@@ -31,31 +34,37 @@ body{
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 16px;
 }
-#checkboard .star{
+#checkboard .star {
 	background: url(img/star.png) no-repeat scroll center center;
 }
-#Condition0{
-	height:130px;
+
+#Condition0 {
+	height:60px;
 	width:200px;
 	text-align: center;
-	background-color: #ff55ff;
-	float: left;
+	background-color: #8BC34A;
+	float: right;
 }
-#Condition{
-
-	height: 20px;
+#Condition {
+	height: 32px;
 	width: 200px;
-	background-color: #ff6666;
+	background-color: #FFEB3B;
 	text-align: center;
-
-
+	font-size: 25px;
+	font-weight: bold;
 }
-#Step{
-	height: 130px;
-	width: 500px;
-	text-align: center;
-	background-color: #5555ff;
-	float:left;
+#Step {
+	height: 683px;
+	width: 200px;
+	background-color: #8BC34A;
+	float: right;
+	font-size: 20px;
+	overflow-y: scroll
+}
+#Step::first-line {
+	background-color: #B2FF59;
+    font-weight: bold;
+    font-size: 22px;
 }
 
 </style>
@@ -64,18 +73,15 @@ body{
 <body>
 	<table id="checkboard" cellpadding="0" cellspacing="0"></table>
 	<div id="Condition0">
-		<p>目前狀態：</p>
-		<div id="Condition">
-		</div>
-		<p>正在下棋</p>
+		<p>GGCheersBar 狀態</p>
+		<div id="Condition"></div>
 	</div>
-	<div id="Step" style="overflow-y: scroll">
+	<div id="Step">
 	</div>
 </body>
-<pre>
-<script type="text/javascript">
-/*
 
+<script>
+/*
 		//Basic step
 		//1：控制棋子在棋盤内活動
 		//2：棋子落在方格中
@@ -92,53 +98,53 @@ var Gobang = {}
 
 	Gobang.black = 0;		//黑子
 	Gobang.white = 1;		//白子
-	Gobang.type  = 0;
+	Gobang.type = 0;
 
-	Gobang.current  = null;		// current 棋子
+	Gobang.current = null;		// current 棋子
 
 	Gobang.calculate = {
-		type 	  : null ,  //棋子 kind
-		FIR	  : null,   //Five-In-a-Row
-		state : 0,   //Checkboard_Condition 0:ing ; 1:end ; 2:tie
-		msg		  : null,   //messeage
+		type: null ,  //棋子 kind
+		FIR: null,   //Five-In-a-Row
+		state: 0,   //Checkboard_Condition 0:ing ; 1:end ; 2:tie
+		msg: null,   //messeage
 	},
 
-	Gobang.rule = function(){
-		function getElement(){
+	Gobang.rule = function() {
+		function getElement() {
 			//getting the x,y coordinate
-			var x =	parseInt( Gobang.current.coordinate[0] );   //x-coordinate
-			var y =	parseInt( Gobang.current.coordinate[1] );	  //y-coordinate
+			var x =	parseInt(Gobang.current.coordinate[0]);   //x-coordinate
+			var y =	parseInt(Gobang.current.coordinate[1]);	  //y-coordinate
 			//Setting interval, scope
 			var scope = {
-				'h' : new Array( [ x - 4 , y ] , [ x + 4 , y ]),  //slope 0
-				's' : new Array( [ x , y - 4 ] , [ x , y + 4 ]),  //slope DNE
-				'z' : new Array( [ x - 4  , y + 4] , [ x + 4 , y - 4 ] ), //slope -1
-				'y' : new Array( [ x - 4  , y - 4] , [ x + 4 , y + 4 ] )  //slope +1
+				'h' : new Array([x - 4 , y], [x + 4 , y]),  //slope 0
+				's' : new Array([x , y - 4], [x , y + 4]),  //slope DNE
+				'z' : new Array([x - 4  , y + 4], [x + 4 , y - 4]), //slope -1
+				'y' : new Array([x - 4  , y - 4], [x + 4 , y + 4])  //slope +1
 			};
 
 			//getting element
-			var element = new Array([],[],[],[]);
+			var element = new Array([], [], [], []);
 			//slope 0 element
-			for(var h = scope['h'][0][0]; h <= scope['h'][1][0] && h < 15; h++){
-				if( h >= 0 ){
+			for (var h = scope['h'][0][0]; h <= scope['h'][1][0] && h < 15; h++) {
+				if (h >= 0) {
 					element[0].push( new Array( h,scope['h'][1][1] ) );
 				}
 			}
 			//slope DNE element
-			for(var s = scope['s'][0][1]; s <= scope['s'][1][1] && s < 15; s++){
-				if( s >= 0 ){
+			for (var s = scope['s'][0][1]; s <= scope['s'][1][1] && s < 15; s++) {
+				if (s >= 0) {
 					element[1].push( new Array( scope['s'][0][0] , s) );
 				}
 			}
 			//slope -1 element
-			for( var z = scope['z'][0]; z[0] <= scope['z'][1][0] && z[1] >= scope['z'][1][1]; z[0]++,z[1]--){
-				if( z[0] >=0 && z[0] < 15 && z[1] < 15 && z[1] >= 0 ){
+			for (var z = scope['z'][0]; z[0] <= scope['z'][1][0] && z[1] >= scope['z'][1][1]; z[0]++, z[1]--) {
+				if (z[0] >=0 && z[0] < 15 && z[1] < 15 && z[1] >= 0 ) {
 					element[2].push( new Array( z[0] , z[1]) );
 				}
 			}
 			//slope 1 element
-			for( var y = scope['y'][0]; y[0] <= scope['y'][1][0] && y[1] <= scope['y'][1][1]; y[0]++,y[1]++){
-				if( y[0] >=0 && y[0] < 15 && y[1] < 15 && y[1] >= 0 ){
+			for (var y = scope['y'][0]; y[0] <= scope['y'][1][0] && y[1] <= scope['y'][1][1]; y[0]++, y[1]++) {
+				if (y[0] >=0 && y[0] < 15 && y[1] < 15 && y[1] >= 0 ) {
 					element[3].push( new Array( y[0] , y[1]) );
 				}
 			}
@@ -147,88 +153,66 @@ var Gobang = {}
 		}
 		return {
 			control : '',
-			putting   : function(){
+			putting : function(){
 				//control 棋子
-				Gobang.checkboard.obj.addEventListener('click',this.control=function(e){
+				Gobang.checkboard.obj.addEventListener('click', this.control = function(e) {
 					//stop from auto act
-					e.target.addEventListener('click',function(e){
+					e.target.addEventListener('click', function(e) {
 						e.stopPropagation();
-					},false);
+					}, false);
 					//create 棋子
-					var self = new Gobang.chessman( Gobang.type , e.target.id);
+					var self = new Gobang.chessman(Gobang.type , e.target.id);
 					//store 棋子
 					Gobang.current	= self;
-					Gobang.checkboard.table[ self.coordinate[0] ][ self.coordinate[1] ] = self;
+					Gobang.checkboard.table[self.coordinate[0]][self.coordinate[1]] = self;
 					//Determine whether FIR
-					if( !Gobang.calculate.state){
+					if (!Gobang.calculate.state) {
 						//determination
 						Gobang.rule.determination();
 						//whose turn
 						Gobang.type = Gobang.type ? Gobang.black : Gobang.white;
-
 						//Display the Condition state;
 						var div = document.getElementById("Condition");
-						var div1 =document.getElementById("Step");
+						var div1 = document.getElementById("Step");
 						var test ;
-							if(!Gobang.type){
-									div.textContent ="黑方";
+						if (!Gobang.type) {
+							div.innerText = "黑方 正在下棋";
 
-									div1.textContent="白方第";
-									div1.textContent+=Gobang.num-1;
-									//div.writeln("<p>this is the first line.</p>");
-									div1.textContent+="手, 在  (  ";
-									div1.textContent+= Gobang.current.coordinate[1];
-									div1.textContent+="  ,  ";
-									div1.textContent+= Gobang.current.coordinate[0];
-									div1.textContent+=" )";
+							div1.innerHTML = "<br>" + div1.innerHTML;
+							div1.innerText = "[白 " + (Gobang.num - 1) + "] "
+								+ "("
+								+ String.fromCharCode(65 + parseInt(Gobang.current.coordinate[1]))
+								+ ", " + Gobang.current.coordinate[0] + ")"
+								+ div1.innerText;
+						} else {
+							div.innerText = "白方 正在下棋";
 
-
-
-								}
-								else {
-									div.textContent ="白方";
-									div1.textContent="黑方第"
-
-									div1.textContent+=Gobang.num-1;
-									div1.textContent+="手, 在  (   ";
-									div1.textContent+= Gobang.current.coordinate[1];
-
-
-									div1.textContent+="  ,  ";
-									div1.textContent+= Gobang.current.coordinate[0];
-									div1.textContent+=" )";
-
-								}
-
-
-
-
-
-
-
-
+							div1.innerHTML = "<br>" + div1.innerHTML;
+							div1.innerText = "[黑 " + (Gobang.num - 1) + "] "
+								+ "("
+								+ String.fromCharCode(65 + parseInt(Gobang.current.coordinate[1]))
+								+ ", " + Gobang.current.coordinate[0] + ")"
+								+ div1.innerText;
 						}
-
-
-
+					}
 					//ScoreBoard
 					Gobang.rule.ScoreBoard();
-				},false)
+				}, false)
 			},
 			//Create the function to Determine whether FIR
-			determination : function(){
+			determination: function() {
 				var element = getElement();
-				var line   = new Array();
-				for(var i = 0 ; i < element.length; i++){
-					for(var h = 0 ; h < 5; h++){
+				var line = new Array();
+				for (var i = 0; i < element.length; i++) {
+					for (var h = 0; h < 5; h++) {
 						line = new Array();
-						for(var z = 0 ; z < 5 && z + h < element[i].length; z++){
+						for (var z = 0 ; z < 5 && z + h < element[i].length; z++) {
 							var x = element[i][z+h][0];
 							var y = element[i][z+h][1];
-							if( typeof Gobang.checkboard.table[x][y] !== 'undefined'){
-								if( Gobang.checkboard.table[x][y].type == Gobang.current.type ){
-									 line.push( Gobang.checkboard.table[x][y] );
-									 if( line.length == 5){
+							if (typeof Gobang.checkboard.table[x][y] !== 'undefined') {
+								if (Gobang.checkboard.table[x][y].type == Gobang.current.type) {
+									 line.push(Gobang.checkboard.table[x][y]);
+									 if (line.length == 5) {
 									 	Gobang.calculate.FIR = [].concat(line);
 										Gobang.calculate.state = 1;
 										Gobang.calculate.type = Gobang.current.type;
@@ -240,21 +224,21 @@ var Gobang = {}
 				}
 			},
 			//FINAL score msg
-			ScoreBoard : function( ){
-				if( Gobang.calculate.state ){
-					Gobang.checkboard.obj.removeEventListener('click',this.control,false);
-					Gobang.calculate.msg = Gobang.calculate.type ? '白 WIN' : '黑 WIN';
-					alert(Gobang.calculate.msg);
+			ScoreBoard : function() {
+				if (Gobang.calculate.state) {
+					Gobang.checkboard.obj.removeEventListener('click', this.control, false);
+					document.getElementById("Condition").innerText =
+						Gobang.calculate.type ? '白方 獲勝' : '黑方 獲勝';
 				}
 			}
 		}
 	}()
 	//checkboard setting
 	Gobang.checkboard = {
-		obj     : document.getElementById('checkboard'),
-		Form   : new Array(15,15),  //checkboard:15x15
-		table  	: new Array(15),	   // table
-		star : ['7,7','3,11','11,11','3,3','11,3'],	//the specific position : star
+		obj: document.getElementById('checkboard'),
+		Form: new Array(15,15),  //checkboard:15x15
+		table: new Array(15),	   // table
+		star: ['7,7','3,11','11,11','3,3','11,3'],	//the specific position : star
 
 		create  : function(){
 			var td = '<thead><th></th>';
@@ -267,16 +251,14 @@ var Gobang = {}
 				tr += '<tr>' + '<th style="border-right: 3px solid #000">'
 					+ String.fromCharCode(65 + y) + '</th>';
 				this.table[y] = new Array(15);        //initialize checkboard
-				for(var x = 0; x < this.Form[1]; x++){ //generate coordinate
-					var xy = new Array(x,y) , tdStyle = ''
-					for(var i = 0 ; i < this.star.length; i++){//Drawing Star
-						if( this.star[i].toString() == xy.toString() ){
+				for (var x = 0; x < this.Form[1]; x++) { //generate coordinate
+					var xy = new Array(x,y), tdStyle = '';
+					for (var i = 0 ; i < this.star.length; i++) {//Drawing Star
+						if (this.star[i].toString() == xy.toString()) {
 							tdStyle = 'star';
 						}
 					}
-					tr += '<td id=' + xy
-						  +  ' class=' + tdStyle
-						  +	 '></td>';
+					tr += '<td id=' + xy + ' class=' + tdStyle + '></td>';
 				}
 				tr += '</tr>';
 			}
@@ -286,10 +268,10 @@ var Gobang = {}
 	}
 
 	//棋子setting
-	Gobang.chessman = function( type , coordinate ){
-		this.id		 =	Gobang.num++;
-		this.type 	 =  type;
-		this.coordinate = 	coordinate.split(',');
+	Gobang.chessman = function(type , coordinate) {
+		this.id = Gobang.num++;
+		this.type = type;
+		this.coordinate =  coordinate.split(',');
 
 		var img = new Array(
 			'url("img/black.png") no-repeat scroll center center',
@@ -297,14 +279,12 @@ var Gobang = {}
 		);
 
 		var target = document.getElementById( coordinate );
-			target.style.background = img[type];
-			target.textContent = this.id;
-
+		target.style.background = img[type];
+		target.textContent = this.id;
 	}
 
 Gobang.checkboard.create();
 Gobang.rule.putting();
 </script>
-</pre>
 
 </html>
