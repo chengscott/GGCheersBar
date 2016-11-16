@@ -66,6 +66,34 @@ body{
     font-weight: bold;
     font-size: 22px;
 }
+nav{
+
+}
+nav ul{
+
+	list-style:none;}
+nav ul li{
+	float:right;
+	margin-left:0%;
+	height: 32px;
+	width: 200px;
+	}
+nav ul li a{
+	display:block;
+	text-align:center;
+	text-decoration:none;
+	font-size:1.4em;
+	color:#1D0AC0;
+	line-height:50px;
+	border:#000000 2px solid;
+	background-color:#FF9116;
+	border-radius:0.5em;
+	transition:background-color 5s,font-size 2s,height 2s,transform 2s;}
+
+	nav ul li a:hover{
+	background-color:#D000FF;
+	font-size:1.3em;
+	transform:rotate(360deg);}
 
 </style>
 </head>
@@ -75,9 +103,18 @@ body{
 	<div id="Condition0">
 		<p>GGCheersBar 狀態</p>
 		<div id="Condition"></div>
+		<nav id="Regret">
+			<ul>
+				<li><a href="#">悔棋</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
 	<div id="Step">
 	</div>
+
+
+
 </body>
 
 <script>
@@ -158,7 +195,7 @@ var Gobang = {}
 				Gobang.checkboard.obj.addEventListener('click', this.control = function(e) {
 					//stop from auto act
 					e.target.addEventListener('click', function(e) {
-						e.stopPropagation();
+					e.stopPropagation();
 					}, false);
 					//create 棋子
 					var self = new Gobang.chessman(Gobang.type , e.target.id);
@@ -166,6 +203,7 @@ var Gobang = {}
 					Gobang.current	= self;
 					Gobang.checkboard.table[self.coordinate[0]][self.coordinate[1]] = self;
 					//Determine whether FIR
+
 					if (!Gobang.calculate.state) {
 						//determination
 						Gobang.rule.determination();
