@@ -34,14 +34,46 @@ body{
 #checkboard .star{
 	background: url(img/star.png) no-repeat scroll center center;
 }
+#Condition0{
+	height:130px;
+	width:200px;
+	text-align: center;
+	background-color: #ff55ff;
+	float: left;
+}
+#Condition{
+
+	height: 20px;
+	width: 200px;
+	background-color: #ff6666;
+	text-align: center;
+
+
+}
+#Step{
+	height: 130px;
+	width: 500px;
+	text-align: center;
+	background-color: #5555ff;
+	float:left;
+}
+
 </style>
 </head>
 
 <body>
 	<table id="checkboard" cellpadding="0" cellspacing="0"></table>
+	<div id="Condition0">
+		<p>目前狀態：</p>
+		<div id="Condition">
+		</div>
+		<p>正在下棋</p>
+	</div>
+	<div id="Step" style="overflow-y: scroll">
+	</div>
 </body>
-
-<script>
+<pre>
+<script type="text/javascript">
 /*
 
 		//Basic step
@@ -56,7 +88,7 @@ body{
 
 
 var Gobang = {}
-	Gobang.num = 0;   		//棋子 total #
+	Gobang.num = 1;   		//棋子 total #
 
 	Gobang.black = 0;		//黑子
 	Gobang.white = 1;		//白子
@@ -66,7 +98,7 @@ var Gobang = {}
 
 	Gobang.calculate = {
 		type 	  : null ,  //棋子 kind
-		FIR	  : null,   //Five-In-a-Row 
+		FIR	  : null,   //Five-In-a-Row
 		state : 0,   //Checkboard_Condition 0:ing ; 1:end ; 2:tie
 		msg		  : null,   //messeage
 	},
@@ -133,7 +165,52 @@ var Gobang = {}
 						Gobang.rule.determination();
 						//whose turn
 						Gobang.type = Gobang.type ? Gobang.black : Gobang.white;
-					}
+
+						//Display the Condition state;
+						var div = document.getElementById("Condition");
+						var div1 =document.getElementById("Step");
+						var test ;
+							if(!Gobang.type){
+									div.textContent ="黑方";
+
+									div1.textContent="白方第";
+									div1.textContent+=Gobang.num-1;
+									//div.writeln("<p>this is the first line.</p>");
+									div1.textContent+="手, 在  (  ";
+									div1.textContent+= Gobang.current.coordinate[1];
+									div1.textContent+="  ,  ";
+									div1.textContent+= Gobang.current.coordinate[0];
+									div1.textContent+=" )";
+
+
+
+								}
+								else {
+									div.textContent ="白方";
+									div1.textContent="黑方第"
+
+									div1.textContent+=Gobang.num-1;
+									div1.textContent+="手, 在  (   ";
+									div1.textContent+= Gobang.current.coordinate[1];
+
+
+									div1.textContent+="  ,  ";
+									div1.textContent+= Gobang.current.coordinate[0];
+									div1.textContent+=" )";
+
+								}
+
+
+
+
+
+
+
+
+						}
+
+
+
 					//ScoreBoard
 					Gobang.rule.ScoreBoard();
 				},false)
@@ -228,6 +305,6 @@ var Gobang = {}
 Gobang.checkboard.create();
 Gobang.rule.putting();
 </script>
-
+</pre>
 
 </html>
