@@ -66,7 +66,9 @@ namespace MCTS {
 	}
 
 	Position ComputeMove(const Go& go) {
-		std::vector<Position> moves = go.GetMoves();
+		std::vector<Position> moves = go.GetAchilles();
+		if (!moves.empty()) return moves[0];
+		moves = go.GetMoves();
 		if (moves.size() == 1) return moves[0];
 		Node root = ComputeTree(go);
 		long long games_played = root.getVisits();
@@ -96,7 +98,7 @@ namespace MCTS {
 	}
 
 	Node ComputeTree(Go go) {
-		auto start_time = high_resolution_clock::now();
+		const auto start_time = high_resolution_clock::now();
 		Node* node = new Node(go);
 		while (true) {
 			// Selection
@@ -120,8 +122,8 @@ namespace MCTS {
 				node_parent = node->getParent();
 			}
 			// time threshold
-			auto end_time = high_resolution_clock::now();
-			double dt = 1.e-9*duration_cast<nanoseconds>(end_time - start_time).count();
+			const auto end_time = high_resolution_clock::now();
+			const double dt = 1.e-9*duration_cast<nanoseconds>(end_time - start_time).count();
 			if (dt > THRESHOLD_TIME) break;
 		}
 		return *node;

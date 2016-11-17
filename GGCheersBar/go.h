@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <random>
+#include <functional>
 
 namespace GGCheersBar {
 	class Go {
@@ -15,10 +15,11 @@ namespace GGCheersBar {
 		Chess getChess() const;
 		State Judge() const;
 		void Move(const Position&);
+		std::vector<Position> GetAchilles() const;
 		std::vector<Position> GetMoves() const;
 		void Simulation();
 	private:
-		int* GetLine(const Position&, const Chess&) const;
+		std::vector<int> GetLine(const Position&, const Chess&) const;
 		State isWin(const Chess&) const;
 		Chess board_[15][15], chess_;
 		Position curpos_;
