@@ -68,7 +68,7 @@ MCTS 會運用到大量的節點展開，因此我們選用 C/C++ 來實做核�
 因此就實際而言，許多參數都只能藉由不斷猜測、嘗試和實驗而得到的。
 所以專案大部分的時間，都是在對常數和細節微調。
 
-經過幾次的實驗之後，蒙地卡羅的搜尋樹通常會長成（圖\ref{search}），但是這種樹非常容易形成混沌系統\cite{CHAOS}。
+經過幾次的實驗之後，蒙地卡羅的搜尋樹通常會長成圖\ref{search}，但是這種樹非常容易形成混沌系統\cite{CHAOS}。
 一旦變成混度系統，因為成長參數會太大，而且導致非常容易崩塌（MCTS 的隨機性更是會突顯這件事）。
 實驗上則是更困難，因為一旦初始條件微調，結果就會有極大的擾動。
 \begin{figure*}[h]
@@ -78,13 +78,6 @@ MCTS 會運用到大量的節點展開，因此我們選用 C/C++ 來實做核�
   \label{search}
 \end{figure*}
 
-在圖 \ref{two_ai} 中，兩支 AI 會陷入一個互相防守的棋局，這就是典型的混沌系統，
-\begin{figure*}[h]
-  \caption{兩支 AI 對弈}
-  \centering
-  \includegraphics[width=1\textwidth]{chaos}
-  \label{chaos}
-\end{figure*}
 
 MCTS 主要困難的地方是在權衡 exploration 和 exploitation 的比例。
 如果只仰賴隨機性，則程式需要展開更多的節點，以時間換取空間。
@@ -132,7 +125,7 @@ MCTS 主要困難的地方是在權衡 exploration 和 exploitation 的比例。
 除了程式實做驗證理論以外，我們還有對演算法做效能評估（圖 \ref{performance}）。
 MCTS 四個主要階段最消耗資源的是 Backpropogation 中的計算 UCT，佔了將近九成的資源。
 原本打算使用一維線段樹來維護操作，降低時間複雜度，但是因為組員不熟悉此資料結構而作罷。
-此外，每當程式在計算時，非常仰賴 CPU 運算資源（圖 \ref{cpu}）。
+此外，每當程式在計算時，非常仰賴 CPU 運算資源。
 但是組員們因為技術上的困難，對於多線程編程並不是很熟悉，因此就只能針對實做細節調校。
 
 \begin{figure*}
@@ -140,13 +133,6 @@ MCTS 四個主要階段最消耗資源的是 Backpropogation 中的計算 UCT，
   \centering
   \includegraphics[width=1.2\textwidth]{performance}
   \label{performance}
-\end{figure*}
-
-\begin{figure*}
-  \caption{計算資源}
-  \centering
-  \includegraphics[width=.6\textwidth]{cpu}
-  \label{cpu}
 \end{figure*}
 
 \bibliographystyle{IEEEtran}
